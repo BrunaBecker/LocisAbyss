@@ -1,0 +1,382 @@
+{
+    "frames": {
+        "idle_1.png": {
+            "frame": {
+                "x": 39,
+                "y": 14,
+                "w": 24,
+                "h": 30
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                0
+            ],
+            "offset": [
+                0,
+                0
+            ]
+        },
+        "idle_2.png": {
+            "frame": {
+                "x": 135,
+                "y": 14,
+                "w": 24,
+                "h": 30
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                0
+            ],
+            "offset": [
+                0,
+                0
+            ]
+        },
+        "idle_3.png": {
+            "frame": {
+                "x": 231,
+                "y": 14,
+                "w": 24,
+                "h": 30
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                0
+            ],
+            "offset": [
+                0,
+                0
+            ]
+        },
+        "idle_4.png": {
+            "frame": {
+                "x": 327,
+                "y": 14,
+                "w": 24,
+                "h": 30
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                0
+            ],
+            "offset": [
+                0,
+                0
+            ]
+        },
+        "idle_5.png": {
+            "frame": {
+                "x": 423,
+                "y": 14,
+                "w": 24,
+                "h": 30
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                0
+            ],
+            "offset": [
+                0,
+                0
+            ]
+        },
+        "idle_6.png": {
+            "frame": {
+                "x": 519,
+                "y": 14,
+                "w": 24,
+                "h": 30
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                0
+            ],
+            "offset": [
+                0,
+                0
+            ]
+        },
+        "idle_7.png": {
+            "frame": {
+                "x": 615,
+                "y": 15,
+                "w": 25,
+                "h": 29
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                -1
+            ],
+            "offset": [
+                0,
+                -1
+            ]
+        },
+        "idle_8.png": {
+            "frame": {
+                "x": 711,
+                "y": 16,
+                "w": 26,
+                "h": 28
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                -2
+            ],
+            "offset": [
+                0,
+                -2
+            ]
+        },
+        "idle_9.png": {
+            "frame": {
+                "x": 807,
+                "y": 17,
+                "w": 25,
+                "h": 27
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                -3
+            ],
+            "offset": [
+                0,
+                -3
+            ]
+        },
+        "idle_10.png": {
+            "frame": {
+                "x": 903,
+                "y": 17,
+                "w": 24,
+                "h": 27
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                -3
+            ],
+            "offset": [
+                0,
+                -3
+            ]
+        },
+        "idle_11.png": {
+            "frame": {
+                "x": 999,
+                "y": 16,
+                "w": 22,
+                "h": 28
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 24,
+                "h": 30
+            },
+            "flip_offset": [
+                0,
+                -2
+            ],
+            "offset": [
+                0,
+                -2
+            ]
+        },
+        "idle_12.png": {
+            "frame": {
+                "x": 1095,
+                "y": 15,
+                "w": 22,
+                "h": 29
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 39,
+                "h": 29
+            },
+            "flip_offset": [
+                0,
+                -1
+            ],
+            "offset": [
+                0,
+                -1
+            ]
+        },
+        "idle_13.png": {
+            "frame": {
+                "x": 1191,
+                "y": 14,
+                "w": 23,
+                "h": 30
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 39,
+                "h": 27
+            },
+            "flip_offset": [
+                0,
+                0
+            ],
+            "offset": [
+                0,
+                0
+            ]
+        },
+        "idle_14.png": {
+            "frame": {
+                "x": 1287,
+                "y": 14,
+                "w": 24,
+                "h": 30
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 39,
+                "h": 27
+            },
+            "flip_offset": [
+                0,
+                0
+            ],
+            "offset": [
+                0,
+                0
+            ]
+        },
+        "idle_15.png": {
+            "frame": {
+                "x": 1383,
+                "y": 14,
+                "w": 24,
+                "h": 30
+            },
+            "rotated": false,
+            "trimmed": false,
+            "sprideSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 27,
+                "h": 28
+            },
+            "flip_offset": [
+                0,
+                0
+            ],
+            "offset": [
+                0,
+                0
+            ]
+        }
+    },
+    "frame_quantity": 14,
+    "list_of_frames": [
+        "idle_1.png",
+        "idle_2.png",
+        "idle_3.png",
+        "idle_4.png",
+        "idle_5.png",
+        "idle_6.png",
+        "idle_7.png",
+        "idle_8.png",
+        "idle_9.png",
+        "idle_10.png",
+        "idle_11.png",
+        "idle_12.png",
+        "idle_13.png",
+        "idle_14.png",
+        "idle_15.png"
+    ]
+}
