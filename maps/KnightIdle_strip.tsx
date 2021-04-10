@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.5" tiledversion="1.5.0" name="player_idle" tilewidth="64" tileheight="64" tilecount="15" columns="15">
- <image source="../Sprites/Knight/noBKG_KnightIdle_strip.png" width="960" height="64"/>
+ <image source="../assets/Knight/noBKG_KnightIdle_strip.png" width="960" height="64"/>
  <tile id="0">
   <animation>
    <frame tileid="0" duration="200"/>
