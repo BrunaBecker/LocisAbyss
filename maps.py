@@ -10,6 +10,7 @@ from settings import maps_folder, path, screen
 # Note from future: We've failed escability. TODO Come back to redo this when you have more maps.
 class Map():
     def __init__(self, level):
+        self.name = level
         # Loads the data from the Tiled tmx file to the pygame format
         self.current_map = load_pygame(path.join(maps_folder, f"{level}.tmx"))
         # Do we need the tile width and height to be redone every map? Could just hardcore it on the settings if it stays the same throughout the game. < just makes it look better
@@ -26,13 +27,32 @@ class Map():
         get_map_collision(screen, self.current_map, self.collision_group)
         self.collision_group.update()
 
+    def lever(self):
+        self.current_map.get_layer_by_name("doorlocked_object").visible = not self.current_map.get_layer_by_name("doorlocked_object").visible
+        self.current_map.get_layer_by_name("doorlocked").visible = not self.current_map.get_layer_by_name("doorlocked").visible
+        self.current_map.get_layer_by_name("doorunlocked").visible = not self.current_map.get_layer_by_name("doorunlocked").visible
+        self.current_map.get_layer_by_name("leverlocked").visible = not self.current_map.get_layer_by_name("leverlocked").visible
+        self.current_map.get_layer_by_name("leverunlocked").visible = not self.current_map.get_layer_by_name("leverunlocked").visible
+
     # This draws every tile from the current active map on the screen. Called every frame.
-    def blit_all_tiles(self):
-        # Get the index for every visible tile layer from the map data
-        for i in self.current_map.visible_tile_layers:
-            # For every single tile on this layer...
-            for x, y, image in self.current_map.layers[i].tiles():
-                # ...Draw it. The values of x and y here are also indexes, so we need to multiply them by the tile sizes.
-                screen.blit(image, (x * self.TILEWIDTH, y * self.TILEHEIGHT))
+    def blit_lower_layers(self):
+            for i in self.current_map.visible_tile_layers:
+                layer = self.current_map.layers[i]
+                # For every single tile on this layer...
+                if not layer.properties['layer_above_player']:
+                    for x, y, image in layer.tiles():
+                        # ...Draw it. The values of x and y here are also indexes, so we need to multiply them by the tile sizes.
+                        screen.blit(image, (x * self.TILEWIDTH, y * self.TILEHEIGHT))
+
+    # This draws every tile from the current active map on the screen. Called every frame.
+    def blit_higher_layers(self):
+            for i in self.current_map.visible_tile_layers:
+                layer = self.current_map.layers[i]
+                # For every single tile on this layer...
+                if layer.properties['layer_above_player']:
+                    for x, y, image in layer.tiles():
+                        # ...Draw it. The values of x and y here are also indexes, so we need to multiply them by the tile sizes.
+                        screen.blit(image, (x * self.TILEWIDTH, y * self.TILEHEIGHT))
+
 
 active_map = Map("level_one")

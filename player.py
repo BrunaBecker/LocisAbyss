@@ -1,9 +1,9 @@
 import pygame
 import json
 
-from settings import player_assets_folder, CLEAR, WIDTH, HEIGHT, path, clock
+from settings import player_assets_folder, CLEAR, WIDTH, HEIGHT, path, clock, fool_font, screen, interact_text_width
 from maps import active_map
-from collision import Collision_Block
+from collision import Collision_Block, get_volatile_collision, get_interaction
 
 SPRITE_RATE = 60  # Sets the interval between sprites updates
 MOVEMENT_RATE = 240  # Sets the interval between player movement
@@ -51,6 +51,7 @@ class Player(pygame.sprite.Sprite):
         self.attack_timer = CLEAR
         self.current_frame = CLEAR
         self.attack_frame = CLEAR
+        self.interact_timer = CLEAR
         # Sets the starting player horizontal orientation. Needed to flip its sprites when it change directions.
         self.current_flip = "right"
 
@@ -70,7 +71,7 @@ class Player(pygame.sprite.Sprite):
         sprite.set_colorkey((113, 102, 79))
         return sprite
 
-    # Analizes and updates the sprite to be drawn this frame
+    # Analyzes and updates the sprite to be drawn this frame
     def parse_sprite(self):
         # Gets the name of the current frame of this sprite
         name = self.current_state["meta_data"]["list_of_frames"][self.current_frame]
@@ -81,14 +82,14 @@ class Player(pygame.sprite.Sprite):
         self.image = self.get_sprite(x, y, w, h)
         self.rect = self.image.get_rect()
 
-        # Drawns the flipped sprite if the player is turning left
+        # Draw the flipped sprite if the player is turning left
         if self.current_flip == "left":
             self.image = pygame.transform.flip(self.image, True, False)
             self.rect.x, self.rect.y = (
                 self.x - self.current_state["meta_data"]["frames"][name]["flip_offset"][0] + 4,
                 self.y - self.current_state["meta_data"]["frames"][name]["flip_offset"][1],
             )
-        # Drawns the normal version if the player is turning right
+        # Draw the normal version if the player is turning right
         else:
             self.rect.x, self.rect.y = (
                 self.x - self.current_state["meta_data"]["frames"][name]["offset"][0] + 4,
@@ -130,14 +131,26 @@ class Player(pygame.sprite.Sprite):
         self.sprite_timer += clock.get_time()
         self.movement_timer += clock.get_time()
         self.attack_timer += clock.get_time()
+        self.interact_timer += clock.get_time()
 
         # Only updates sprite if it's off cooldown
         if self.sprite_timer >= SPRITE_RATE:
             self.parse_sprite()
             self.sprite_timer = CLEAR
 
+
         # Gets the key pressed by the player this frame
         keystate = pygame.key.get_pressed()
+
+        interaction = get_interaction(active_map.current_map, self.x, self.y)
+        if interaction:
+            interact_hover_text = fool_font.render("Press F to interact", True, (255,255,255))
+            screen.blit(interact_hover_text, (self.x - interact_text_width/3, self.y - 30))
+            if self.interact_timer >= 400 and keystate[pygame.K_f]:
+                self.interact_timer = CLEAR
+                if interaction == "lever":
+                    active_map.lever()
+
         # Only moves if movement is off cooldown
         if self.movement_timer >= MOVEMENT_RATE:
 
@@ -149,12 +162,16 @@ class Player(pygame.sprite.Sprite):
             "west": Collision_Block(self.x - active_map.TILEWIDTH, self.y, active_map.TILEWIDTH, active_map.TILEHEIGHT),
             }
 
+
+            v_collision = get_volatile_collision(active_map.current_map)
+
             # The keys D and Right Arrow move the character to the right if it's not colliding with anything and it's not at the edge of screen
             if (
                 (keystate[pygame.K_d] or keystate[pygame.K_RIGHT])
                 and self.x + active_map.TILEWIDTH < WIDTH
-                and pygame.sprite.spritecollideany(self.collision_wings["east"], active_map.collision_group)
-            ) is None:
+                and pygame.sprite.spritecollideany(self.collision_wings["east"], active_map.collision_group) is None
+                and pygame.sprite.spritecollideany(self.collision_wings["east"], v_collision) is None
+                ):
                 # Flips the character to the right if he was previously looking left
                 if self.current_flip == "left":
                     self.current_flip = "right"
@@ -165,7 +182,8 @@ class Player(pygame.sprite.Sprite):
                 (keystate[pygame.K_a] or keystate[pygame.K_LEFT])
                 and self.x > 0
                 and pygame.sprite.spritecollideany(self.collision_wings["west"], active_map.collision_group) is None
-            ):
+                and pygame.sprite.spritecollideany(self.collision_wings["west"], v_collision) is None
+                ) :
                 # Flips the character to the left if he was previously looking right
                 if self.current_flip == "right":
                     self.current_flip = "left"
@@ -176,6 +194,7 @@ class Player(pygame.sprite.Sprite):
                 (keystate[pygame.K_s] or keystate[pygame.K_DOWN])
                 and self.y + active_map.TILEHEIGHT < HEIGHT
                 and pygame.sprite.spritecollideany(self.collision_wings["south"], active_map.collision_group) is None
+                and pygame.sprite.spritecollideany(self.collision_wings["south"], v_collision) is None
             ):
                 self.y += active_map.TILEHEIGHT
                 self.movement_timer = CLEAR
@@ -184,6 +203,7 @@ class Player(pygame.sprite.Sprite):
                 (keystate[pygame.K_w] or keystate[pygame.K_UP])
                 and self.y > 0
                 and pygame.sprite.spritecollideany(self.collision_wings["north"], active_map.collision_group) is None
+                and pygame.sprite.spritecollideany(self.collision_wings["north"], v_collision) is None
             ):
                 self.y -= active_map.TILEHEIGHT
                 self.movement_timer = CLEAR

@@ -18,10 +18,11 @@ while running:
     # screen.fill((0, 0, 0)) 
 
     # Draw the entirety of the current map
-    active_map.blit_all_tiles()
+    active_map.blit_lower_layers()
     # Updates and draws the player
     player.update()
     player.draw(screen)
+    active_map.blit_higher_layers()
 
     # Update the full display Surface to the screen. Necessary to draw anything at all.
     pygame.display.flip()
