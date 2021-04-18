@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="left-up" width="40" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="31" nextobjectid="114">
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="left-up" width="40" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="31" nextobjectid="119">
  <tileset firstgid="1" source="dungeon_tileset.tsx"/>
  <tileset firstgid="751" source="KnightIdle_strip.tsx"/>
  <layer id="11" name="ground" width="40" height="32">
-  <properties>
-   <property name="layer_above_player" type="bool" value="false"/>
-  </properties>
   <data encoding="csv">
 211,211,211,211,211,211,211,211,211,211,211,211,211,211,211,211,211,211,211,211,211,211,211,211,290,285,285,285,219,220,247,246,233,248,219,213,262,273,274,272,
 211,211,211,211,211,211,211,211,211,211,211,211,275,275,211,211,211,211,211,211,211,211,211,211,274,272,276,223,288,263,254,219,270,214,288,225,218,211,274,211,
@@ -42,9 +39,6 @@
 </data>
  </layer>
  <layer id="18" name="barrier" width="40" height="32">
-  <properties>
-   <property name="layer_above_player" type="bool" value="false"/>
-  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -120,9 +114,6 @@
 </data>
  </layer>
  <layer id="12" name="wall" width="40" height="32">
-  <properties>
-   <property name="layer_above_player" type="bool" value="false"/>
-  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,121,122,122,123,124,122,122,124,126,0,0,0,0,0,
@@ -159,9 +150,6 @@
 </data>
  </layer>
  <layer id="13" name="ceiling" width="40" height="32">
-  <properties>
-   <property name="layer_above_player" type="bool" value="false"/>
-  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3758096984,3758096984,3758096984,3758096984,3758096984,3758096984,3758096984,3758096984,3758096984,3758096984,3758096984,0,0,0,0,
 0,0,3758096984,3758096984,3758096984,3758096984,3758096984,3758096984,3758096984,3758096984,3758096984,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1073742394,0,0,0,0,0,0,0,0,0,2147484218,0,0,0,0,
@@ -198,9 +186,6 @@
 </data>
  </layer>
  <layer id="15" name="decorations" width="40" height="32">
-  <properties>
-   <property name="layer_above_player" type="bool" value="false"/>
-  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,581,0,0,0,581,0,0,0,0,0,0,0,
@@ -237,9 +222,6 @@
 </data>
  </layer>
  <layer id="19" name="interact" width="40" height="32">
-  <properties>
-   <property name="layer_above_player" type="bool" value="false"/>
-  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -276,9 +258,6 @@
 </data>
  </layer>
  <layer id="29" name="leverunlocked" width="40" height="32" visible="0">
-  <properties>
-   <property name="layer_above_player" type="bool" value="false"/>
-  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -315,9 +294,6 @@
 </data>
  </layer>
  <layer id="30" name="leverlocked" width="40" height="32">
-  <properties>
-   <property name="layer_above_player" type="bool" value="false"/>
-  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -354,9 +330,6 @@
 </data>
  </layer>
  <layer id="26" name="doorlocked" width="40" height="32">
-  <properties>
-   <property name="layer_above_player" type="bool" value="false"/>
-  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -393,9 +366,6 @@
 </data>
  </layer>
  <layer id="27" name="doorunlocked" width="40" height="32" visible="0">
-  <properties>
-   <property name="layer_above_player" type="bool" value="false"/>
-  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -481,8 +451,9 @@
   <object id="96" x="1088" y="96" width="32" height="32"/>
   <object id="104" x="1152" y="960" width="32" height="32"/>
   <object id="105" x="832" y="128" width="64" height="64"/>
+  <object id="118" x="192" y="736"/>
  </objectgroup>
- <objectgroup id="28" name="doorlocked_object">
+ <objectgroup id="28" name="doorlocked_object" visible="0">
   <object id="100" x="1024" y="224" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="25" name="interactions" visible="0">

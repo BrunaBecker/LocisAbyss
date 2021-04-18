@@ -8,7 +8,7 @@ from settings import maps_folder, path, screen
 
 # Load Maps. To be updated with more maps. Pay dear attention to escability!!
 # Note from future: We've failed escability. TODO Come back to redo this when you have more maps.
-class Map():
+class Tmx_Map():
     def __init__(self, level):
         self.name = level
         # Loads the data from the Tiled tmx file to the pygame format
@@ -27,6 +27,13 @@ class Map():
         get_map_collision(screen, self.current_map, self.collision_group)
         self.collision_group.update()
 
+        self.interactions = {
+            "level_one": {
+                "lever": self.lever,
+                "exit": None,
+            }
+        }
+
     def lever(self):
         self.current_map.get_layer_by_name("doorlocked_object").visible = not self.current_map.get_layer_by_name("doorlocked_object").visible
         self.current_map.get_layer_by_name("doorlocked").visible = not self.current_map.get_layer_by_name("doorlocked").visible
@@ -39,7 +46,7 @@ class Map():
             for i in self.current_map.visible_tile_layers:
                 layer = self.current_map.layers[i]
                 # For every single tile on this layer...
-                if not layer.properties['layer_above_player']:
+                if not layer.properties.get('layer_above_player'):
                     for x, y, image in layer.tiles():
                         # ...Draw it. The values of x and y here are also indexes, so we need to multiply them by the tile sizes.
                         screen.blit(image, (x * self.TILEWIDTH, y * self.TILEHEIGHT))
@@ -49,10 +56,11 @@ class Map():
             for i in self.current_map.visible_tile_layers:
                 layer = self.current_map.layers[i]
                 # For every single tile on this layer...
-                if layer.properties['layer_above_player']:
+                if layer.properties.get('layer_above_player'):
                     for x, y, image in layer.tiles():
                         # ...Draw it. The values of x and y here are also indexes, so we need to multiply them by the tile sizes.
                         screen.blit(image, (x * self.TILEWIDTH, y * self.TILEHEIGHT))
 
 
-active_map = Map("level_one")
+active_map = Tmx_Map("level_one")
+

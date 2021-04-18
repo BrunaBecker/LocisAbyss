@@ -4,6 +4,7 @@ import json
 from settings import player_assets_folder, CLEAR, WIDTH, HEIGHT, path, clock, fool_font, screen, interact_text_width
 from maps import active_map
 from collision import Collision_Block, get_volatile_collision, get_interaction
+from tools import Tools
 
 SPRITE_RATE = 60  # Sets the interval between sprites updates
 MOVEMENT_RATE = 240  # Sets the interval between player movement
@@ -45,6 +46,11 @@ class Player(pygame.sprite.Sprite):
         self.x, self.y = active_map.start_coord["start"]
         # Rect.x and Rect.y are the variable that  sets the player position, but we need to keep self.x and self.y separate because it's the one we are actually going to update
         self.rect.x, self.rect.y = self.x, self.y
+
+        self.max_hp = 10
+        self.hp = 5
+        self.regen = 1
+
         # Start clocks and cooldowns
         self.sprite_timer = SPRITE_RATE
         self.movement_timer = CLEAR
@@ -52,8 +58,10 @@ class Player(pygame.sprite.Sprite):
         self.current_frame = CLEAR
         self.attack_frame = CLEAR
         self.interact_timer = CLEAR
+        self.regen_timer = CLEAR
         # Sets the starting player horizontal orientation. Needed to flip its sprites when it change directions.
         self.current_flip = "right"
+
 
         # Initialize the meta data for each state's spritesheet
         for state in self.list_of_states:
@@ -132,12 +140,20 @@ class Player(pygame.sprite.Sprite):
         self.movement_timer += clock.get_time()
         self.attack_timer += clock.get_time()
         self.interact_timer += clock.get_time()
+        self.regen_timer += clock.get_time()
 
         # Only updates sprite if it's off cooldown
         if self.sprite_timer >= SPRITE_RATE:
             self.parse_sprite()
             self.sprite_timer = CLEAR
 
+        if self.hp != self.max_hp:
+            Tools.health_bar(screen, self.hp, self.max_hp, self.x, self.y, self.rect.width, self.rect.height)
+            if self.regen_timer >= 1000:
+                self.hp += self.regen
+                self.regen_timer = CLEAR
+                if self.hp > self.max_hp:
+                    self.hp == self.max_hp
 
         # Gets the key pressed by the player this frame
         keystate = pygame.key.get_pressed()
@@ -148,8 +164,7 @@ class Player(pygame.sprite.Sprite):
             screen.blit(interact_hover_text, (self.x - interact_text_width/3, self.y - 30))
             if self.interact_timer >= 400 and keystate[pygame.K_f]:
                 self.interact_timer = CLEAR
-                if interaction == "lever":
-                    active_map.lever()
+                active_map.interactions[active_map.name][interaction]()
 
         # Only moves if movement is off cooldown
         if self.movement_timer >= MOVEMENT_RATE:
@@ -161,7 +176,6 @@ class Player(pygame.sprite.Sprite):
             "east": Collision_Block(self.x + active_map.TILEWIDTH, self.y, active_map.TILEWIDTH, active_map.TILEHEIGHT),
             "west": Collision_Block(self.x - active_map.TILEWIDTH, self.y, active_map.TILEWIDTH, active_map.TILEHEIGHT),
             }
-
 
             v_collision = get_volatile_collision(active_map.current_map)
 
@@ -178,7 +192,7 @@ class Player(pygame.sprite.Sprite):
                 self.x += active_map.TILEWIDTH
                 self.movement_timer = CLEAR
             # The keys A and Left Arrow move the character to the right if it's not colliding with anything and it's not at the edge of screen
-            if (
+            elif (
                 (keystate[pygame.K_a] or keystate[pygame.K_LEFT])
                 and self.x > 0
                 and pygame.sprite.spritecollideany(self.collision_wings["west"], active_map.collision_group) is None
@@ -190,7 +204,7 @@ class Player(pygame.sprite.Sprite):
                 self.x -= active_map.TILEWIDTH
                 self.movement_timer = CLEAR
             # The keys S and Down Arrow move the character downwards if it's not colliding with anything and it's not at the edge of screen
-            if (
+            elif (
                 (keystate[pygame.K_s] or keystate[pygame.K_DOWN])
                 and self.y + active_map.TILEHEIGHT < HEIGHT
                 and pygame.sprite.spritecollideany(self.collision_wings["south"], active_map.collision_group) is None
@@ -199,7 +213,7 @@ class Player(pygame.sprite.Sprite):
                 self.y += active_map.TILEHEIGHT
                 self.movement_timer = CLEAR
             # The keys W and Up Arrow move the character downwards if it's not colliding with anything and it's not at the edge of screen
-            if (
+            elif (
                 (keystate[pygame.K_w] or keystate[pygame.K_UP])
                 and self.y > 0
                 and pygame.sprite.spritecollideany(self.collision_wings["north"], active_map.collision_group) is None
@@ -213,6 +227,8 @@ class Player(pygame.sprite.Sprite):
             self.current_state = self.list_of_states["attack"]
             self.current_frame = self.attack_frame
             self.attack_timer = CLEAR
+
+        
 
 player = pygame.sprite.Group()
 player.add(Player())

@@ -14,12 +14,7 @@ maps_folder = path.join(loci_dir, "maps")
 assets_folder = path.join(loci_dir, "assets")
 player_assets_folder = path.join(assets_folder, "Knight")
 enemies_assets_folder = path.join(assets_folder, "Enemies")
-demon_folder = path.join(enemies_assets_folder, "demon_boss")
-ghost_folder = path.join(enemies_assets_folder, "ghost")
-hell_beast_folder = path.join(enemies_assets_folder, "hell_beast")
-hell_hound_folder = path.join(enemies_assets_folder, "hell_hound")
-nightmare_folder = path.join(enemies_assets_folder, "nightmare")
-skull_folder = path.join(enemies_assets_folder, "skull")
+
 
 pygame.display.set_caption("Loci's Abyss")
 window_icon = pygame.image.load(path.join(assets_folder, 'locilogo.png'))

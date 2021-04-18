@@ -1,0 +1,30 @@
+{
+    "level_one": {
+        "enemies": [
+            {
+                "type": "ghost",
+                "x": 10,
+                "y": 10
+            },
+            {
+                "type": "skull",
+                "x": 40,
+                "y": 200
+            }
+        ]
+    },
+    "level_two": {
+        "enemies": [
+            {
+                "type": "ghost",
+                "x": 10,
+                "y": 10
+            },
+            {
+                "type": "skull",
+                "x": 40,
+                "y": 200
+            }
+        ]
+    }
+}
