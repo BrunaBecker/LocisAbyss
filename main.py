@@ -7,6 +7,7 @@ from player import player
 # Initialize all imported pygame modules
 pygame.init()
 
+
 # Main loop of the game
 running = True
 while running:
@@ -23,6 +24,10 @@ while running:
     player.update()
     player.draw(screen)
     active_map.blit_higher_layers()
+
+
+    active_map.enemies.update()
+    active_map.enemies.draw(screen)
 
     # Update the full display Surface to the screen. Necessary to draw anything at all.
     pygame.display.flip()

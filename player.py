@@ -7,7 +7,7 @@ from collision import Collision_Block, get_volatile_collision, get_interaction
 from tools import Tools
 
 SPRITE_RATE = 60  # Sets the interval between sprites updates
-MOVEMENT_RATE = 240  # Sets the interval between player movement
+MOVEMENT_RATE = 220  # Sets the interval between player movement
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -43,12 +43,12 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((0, 0))
         self.rect = self.image.get_rect()
         # Defines starting position of the player to the start position of the map
-        self.x, self.y = active_map.start_coord["start"]
+        self.x, self.y = active_map.start_coord
         # Rect.x and Rect.y are the variable that  sets the player position, but we need to keep self.x and self.y separate because it's the one we are actually going to update
         self.rect.x, self.rect.y = self.x, self.y
 
         self.max_hp = 10
-        self.hp = 5
+        self.hp = self.max_hp
         self.regen = 1
 
         # Start clocks and cooldowns
@@ -133,6 +133,15 @@ class Player(pygame.sprite.Sprite):
             # Sets the next attack animation starting frame
             self.attack_frame = CLEAR
 
+        self.sprite_timer = CLEAR
+
+    def not_colliding(self, direction):
+        v_collision = get_volatile_collision(active_map.current_map)
+        return (pygame.sprite.spritecollideany(self.collision_wings[direction], active_map.collision_group) is None
+                and pygame.sprite.spritecollideany(self.collision_wings[direction], v_collision) is None
+                and pygame.sprite.spritecollideany(self.collision_wings[direction], active_map.enemies) is None)
+
+
     def update(self):
 
         # Updates clocks and cooldowns
@@ -145,7 +154,7 @@ class Player(pygame.sprite.Sprite):
         # Only updates sprite if it's off cooldown
         if self.sprite_timer >= SPRITE_RATE:
             self.parse_sprite()
-            self.sprite_timer = CLEAR
+            
 
         if self.hp != self.max_hp:
             Tools.health_bar(screen, self.hp, self.max_hp, self.x, self.y, self.rect.width, self.rect.height)
@@ -177,48 +186,31 @@ class Player(pygame.sprite.Sprite):
             "west": Collision_Block(self.x - active_map.TILEWIDTH, self.y, active_map.TILEWIDTH, active_map.TILEHEIGHT),
             }
 
-            v_collision = get_volatile_collision(active_map.current_map)
-
             # The keys D and Right Arrow move the character to the right if it's not colliding with anything and it's not at the edge of screen
-            if (
-                (keystate[pygame.K_d] or keystate[pygame.K_RIGHT])
-                and self.x + active_map.TILEWIDTH < WIDTH
-                and pygame.sprite.spritecollideany(self.collision_wings["east"], active_map.collision_group) is None
-                and pygame.sprite.spritecollideany(self.collision_wings["east"], v_collision) is None
-                ):
+            if (keystate[pygame.K_d] or keystate[pygame.K_RIGHT]):
                 # Flips the character to the right if he was previously looking left
                 if self.current_flip == "left":
                     self.current_flip = "right"
-                self.x += active_map.TILEWIDTH
-                self.movement_timer = CLEAR
+                if self.not_colliding("east"):
+                    self.x += active_map.TILEWIDTH
+                    self.movement_timer = CLEAR
             # The keys A and Left Arrow move the character to the right if it's not colliding with anything and it's not at the edge of screen
-            elif (
-                (keystate[pygame.K_a] or keystate[pygame.K_LEFT])
-                and self.x > 0
-                and pygame.sprite.spritecollideany(self.collision_wings["west"], active_map.collision_group) is None
-                and pygame.sprite.spritecollideany(self.collision_wings["west"], v_collision) is None
-                ) :
+            elif (keystate[pygame.K_a] or keystate[pygame.K_LEFT]):
                 # Flips the character to the left if he was previously looking right
                 if self.current_flip == "right":
                     self.current_flip = "left"
-                self.x -= active_map.TILEWIDTH
-                self.movement_timer = CLEAR
+                if self.not_colliding("west"):
+                    self.x -= active_map.TILEWIDTH
+                    self.movement_timer = CLEAR
             # The keys S and Down Arrow move the character downwards if it's not colliding with anything and it's not at the edge of screen
-            elif (
-                (keystate[pygame.K_s] or keystate[pygame.K_DOWN])
-                and self.y + active_map.TILEHEIGHT < HEIGHT
-                and pygame.sprite.spritecollideany(self.collision_wings["south"], active_map.collision_group) is None
-                and pygame.sprite.spritecollideany(self.collision_wings["south"], v_collision) is None
-            ):
+            elif ((keystate[pygame.K_s] or keystate[pygame.K_DOWN])
+                and self.not_colliding("south")):
                 self.y += active_map.TILEHEIGHT
                 self.movement_timer = CLEAR
             # The keys W and Up Arrow move the character downwards if it's not colliding with anything and it's not at the edge of screen
             elif (
                 (keystate[pygame.K_w] or keystate[pygame.K_UP])
-                and self.y > 0
-                and pygame.sprite.spritecollideany(self.collision_wings["north"], active_map.collision_group) is None
-                and pygame.sprite.spritecollideany(self.collision_wings["north"], v_collision) is None
-            ):
+                and self.not_colliding("north")):
                 self.y -= active_map.TILEHEIGHT
                 self.movement_timer = CLEAR
 
@@ -227,8 +219,18 @@ class Player(pygame.sprite.Sprite):
             self.current_state = self.list_of_states["attack"]
             self.current_frame = self.attack_frame
             self.attack_timer = CLEAR
+            self.attack_enemy()
+    
+    def attack_enemy(self):
+        if self.current_flip == "right":
+            enemy_hit = pygame.sprite.spritecollideany(self.collision_wings["east"], active_map.enemies)
+            if enemy_hit:
+                enemy_hit.do_damage()
+        elif self.current_flip == "left":
+            enemy_hit = pygame.sprite.spritecollideany(self.collision_wings["west"], active_map.enemies)
+            if enemy_hit:
+                enemy_hit.do_damage()
 
-        
 
 player = pygame.sprite.Group()
 player.add(Player())

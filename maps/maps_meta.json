@@ -1,15 +1,28 @@
 {
     "level_one": {
+        "player_x": 1,
+        "player_y": 22,
         "enemies": [
             {
-                "type": "ghost",
-                "x": 10,
-                "y": 10
+                "type": "hell hound",
+                "x": 23,
+                "y": 24
+            },
+            {
+                "type": "hell hound",
+                "x": 33,
+                "y": 27
             },
             {
                 "type": "skull",
-                "x": 40,
-                "y": 200
+                "x": 32,
+                "y": 14
+            },
+            {
+                "type": "ghost",
+                "hidden": 0,
+                "x": 30,
+                "y": 3
             }
         ]
     },

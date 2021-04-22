@@ -1,8 +1,9 @@
 import pygame
 from pytmx.util_pygame import load_pygame
-
+import json
 from collision import get_map_collision
 from settings import maps_folder, path, screen
+from enemy_archetypes import monster_types
 
 # Yikes... This file is not optimized at all. Proceed with caution.
 
@@ -16,11 +17,10 @@ class Tmx_Map():
         # Do we need the tile width and height to be redone every map? Could just hardcore it on the settings if it stays the same throughout the game. < just makes it look better
         self.TILEWIDTH, self.TILEHEIGHT = self.current_map.tilewidth, self.current_map.tileheight
         # Starting and finishing position for the player when he gets in a new map
-        self.start_coord = {
-            "start": (1 * self.TILEWIDTH, 22 * self.TILEHEIGHT),
-            "end": [(25 * self.TILEWIDTH, 3 * self.TILEHEIGHT), (26 * self.TILEWIDTH, 3 * self.TILEHEIGHT)],
-        }
-
+        with open(path.join(maps_folder, "maps_meta.json")) as f:
+            map_meta = json.load(f)[self.name]
+        self.enemies_load = map_meta["enemies"]
+        self.start_coord = [map_meta["player_x"]*self.TILEWIDTH, map_meta["player_y"]*self.TILEHEIGHT]
         # This creates the group that holds every single collision rectangle for walls and obstructing object
         # Should be done only once with every map load/change of level
         self.collision_group = pygame.sprite.Group()
@@ -33,6 +33,10 @@ class Tmx_Map():
                 "exit": None,
             }
         }
+
+        self.enemies = pygame.sprite.Group()
+        # TODO: clean previous group
+        self.load_enemies_group()
 
     def lever(self):
         self.current_map.get_layer_by_name("doorlocked_object").visible = not self.current_map.get_layer_by_name("doorlocked_object").visible
@@ -60,6 +64,14 @@ class Tmx_Map():
                     for x, y, image in layer.tiles():
                         # ...Draw it. The values of x and y here are also indexes, so we need to multiply them by the tile sizes.
                         screen.blit(image, (x * self.TILEWIDTH, y * self.TILEHEIGHT))
+
+    def load_enemies_group(self):
+        for enemy in self.enemies_load:
+            if enemy["type"] == "ghost" and enemy["hidden"]:
+                self.enemies.add(monster_types[enemy["type"]](enemy["x"]*self.TILEWIDTH, enemy["y"]*self.TILEHEIGHT, "spawn"))
+            else:
+                self.enemies.add(monster_types[enemy["type"]](enemy["x"]*self.TILEWIDTH, enemy["y"]*self.TILEHEIGHT))
+
 
 
 active_map = Tmx_Map("level_one")
