@@ -16,7 +16,8 @@ class Demon(Enemy):
         self.name = "demon"
         self.sprites = {
             "idle": list(pygame.image.load(path.join(demon_folder, "demon_idle", f)) for f in listdir(path.join(demon_folder, "demon_idle"))),
-            "attack": list(pygame.image.load(path.join(demon_folder, "demon_attack_breath", f)) for f in listdir(path.join(demon_folder, "demon_attack_breath")))
+            "attack": list(pygame.image.load(path.join(demon_folder, "demon_attack_breath", f)) for f in listdir(path.join(demon_folder, "demon_attack_breath"))),
+            "damaged": pygame.image.load(path.join(demon_folder, "demon_damaged.png")),
         }
 
 
@@ -32,6 +33,7 @@ class Ghost(Enemy):
             "idle": list(pygame.image.load(path.join(ghost_folder, "ghost_idle", f)) for f in listdir(path.join(ghost_folder, "ghost_idle"))),
             "shriek": list(pygame.image.load(path.join(ghost_folder, "ghost_shriek", f)) for f in listdir(path.join(ghost_folder, "ghost_shriek"))),
             "death": list(pygame.image.load(path.join(ghost_folder, "ghost_death", f)) for f in listdir(path.join(ghost_folder, "ghost_death"))),
+            "damaged": pygame.image.load(path.join(ghost_folder, "ghost_damaged.png")),
         }
 
         self.max_hp = 5
@@ -44,6 +46,7 @@ class Hell_Beast(Enemy):
         self.sprites = {
             "idle": list(pygame.image.load(path.join(hell_beast_folder, "hell_beast_idle", f)) for f in listdir(path.join(hell_beast_folder, "hell_beast_idle"))),
             "burn": list(pygame.image.load(path.join(hell_beast_folder, "hell_beast_burn", f)) for f in listdir(path.join(hell_beast_folder, "hell_beast_burn"))),
+            "damaged": pygame.image.load(path.join(hell_beast_folder, "hell-beast-damaged.png")),
         }
 
         self.max_hp = 8
@@ -57,6 +60,7 @@ class Hell_Hound(Enemy):
             "jump": list(pygame.image.load(path.join(hell_hound_folder, "hell_hound_jump", f)) for f in listdir(path.join(hell_hound_folder, "hell_hound_jump"))),
             "walk": list(pygame.image.load(path.join(hell_hound_folder, "hell_hound_walk", f)) for f in listdir(path.join(hell_hound_folder, "hell_hound_walk"))),
             "run": list(pygame.image.load(path.join(hell_hound_folder, "hell_hound_run", f)) for f in listdir(path.join(hell_hound_folder, "hell_hound_run"))),
+            "damaged": pygame.image.load(path.join(hell_hound_folder, "hell_hound_damaged.png")),
         }
 
         self.max_hp = 3
@@ -67,9 +71,11 @@ class Skull(Enemy):
         self.name = "skull"
         sprites_before = {
             "idle": list(pygame.image.load(path.join(skull_folder, "fire-skull", f)) for f in listdir(path.join(skull_folder, "fire-skull"))),
+            "damaged": pygame.image.load(path.join(skull_folder, "skull_damaged.png")),
         }
         self.sprites = {
-            "idle": list(pygame.transform.smoothscale(f,(48,56)) for f in sprites_before["idle"])
+            "idle": list(pygame.transform.smoothscale(f,(48,56)) for f in sprites_before["idle"]),
+            "damaged": pygame.transform.smoothscale(sprites_before["damaged"],(48,56)),
         }
 
         self.max_hp = 3

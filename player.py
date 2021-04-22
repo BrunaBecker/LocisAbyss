@@ -59,6 +59,7 @@ class Player(pygame.sprite.Sprite):
         self.attack_frame = CLEAR
         self.interact_timer = CLEAR
         self.regen_timer = CLEAR
+        self.damaged_timer = CLEAR
         # Sets the starting player horizontal orientation. Needed to flip its sprites when it change directions.
         self.current_flip = "right"
 
@@ -191,7 +192,7 @@ class Player(pygame.sprite.Sprite):
                 # Flips the character to the right if he was previously looking left
                 if self.current_flip == "left":
                     self.current_flip = "right"
-                if self.not_colliding("east"):
+                if self.not_colliding("east") and self.x + active_map.TILEWIDTH < WIDTH:
                     self.x += active_map.TILEWIDTH
                     self.movement_timer = CLEAR
             # The keys A and Left Arrow move the character to the right if it's not colliding with anything and it's not at the edge of screen
@@ -199,18 +200,15 @@ class Player(pygame.sprite.Sprite):
                 # Flips the character to the left if he was previously looking right
                 if self.current_flip == "right":
                     self.current_flip = "left"
-                if self.not_colliding("west"):
+                if self.not_colliding("west") and self.x > 0:
                     self.x -= active_map.TILEWIDTH
                     self.movement_timer = CLEAR
             # The keys S and Down Arrow move the character downwards if it's not colliding with anything and it's not at the edge of screen
-            elif ((keystate[pygame.K_s] or keystate[pygame.K_DOWN])
-                and self.not_colliding("south")):
+            elif (keystate[pygame.K_s] or keystate[pygame.K_DOWN]) and self.y + active_map.TILEHEIGHT < HEIGHT and self.not_colliding("south"):
                 self.y += active_map.TILEHEIGHT
                 self.movement_timer = CLEAR
             # The keys W and Up Arrow move the character downwards if it's not colliding with anything and it's not at the edge of screen
-            elif (
-                (keystate[pygame.K_w] or keystate[pygame.K_UP])
-                and self.not_colliding("north")):
+            elif (keystate[pygame.K_w] or keystate[pygame.K_UP]) and self.y > 0 and self.not_colliding("north"):
                 self.y -= active_map.TILEHEIGHT
                 self.movement_timer = CLEAR
 
