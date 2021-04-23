@@ -1,6 +1,6 @@
 import pygame
 from settings import path, enemies_assets_folder
-from enemies import Enemy, Tools
+from enemies import Enemy, Tools, SPRITE_RATE, clock
 from os import listdir
 
 demon_folder = path.join(enemies_assets_folder, "demon_boss")
@@ -34,16 +34,28 @@ class Ghost(Enemy):
             "damaged": pygame.image.load(path.join(ghost_folder, "ghost_damaged.png")),
             "hidden": [pygame.Surface((32,32))]
         }
-
-        def update():
-            Enemy.update()
-            if self.within_range and self.current_state == "hidden":
-                self.current_state = "spawn"
-            
-
-
         self.max_hp = 5
+        self.sprite_counters = {}
         Enemy.__init__(self, start_x, start_y, initial_state)
+
+    def update(self):
+        if self.within_range and self.current_state == "hidden":
+            self.current_state = "spawn"
+            self.current_sprite_frame = 0
+            self.sprite_counters["spawn_counter"] = len(self.sprites["spawn"])
+
+        if self.sprite_timer + clock.get_time() >= SPRITE_RATE:
+            self.decrease_counters()
+
+        Enemy.update(self)
+    
+    def decrease_counters(self):
+        for counter in self.sprite_counters:
+            self.sprite_counters[counter] -= 1
+
+        if self.sprite_counters.get("spawn_counter") == 0:
+            self.current_state = "idle"
+            del self.sprite_counters["spawn_counter"]
 
 
 class Hell_Beast(Enemy):

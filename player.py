@@ -155,6 +155,22 @@ class Player(pygame.sprite.Sprite):
     def update_enemy_distance(self):
         for enemy in active_map.enemies:
             enemy.within_range = True if Tools.get_distance(self, enemy) else False
+
+            if enemy.within_range and self.rect.x < enemy.rect.x:
+                enemy.current_flip = "west"
+            elif enemy.within_range and self.rect.x > enemy.rect.x:
+                enemy.current_flip = "east"
+            else:
+                enemy.current_flip = "None"
+
+            if enemy.within_range and self.rect.y < enemy.rect.y:
+                enemy.player_latitude = "north"
+            elif enemy.within_range and self.rect.y > enemy.rect.y:
+                enemy.player_latitude = "south"
+            else: 
+                enemy.player_latitude = "None"
+
+                
                 
             
 

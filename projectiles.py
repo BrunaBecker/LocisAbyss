@@ -1,5 +1,5 @@
 import pygame
-from settings import projectiles_assets_folder, CLEAR, clock, path
+from settings import projectiles_assets_folder, WIDTH, HEIGHT, CLEAR, clock, path
 
 MOVEMENT_RATE = 220
 class Bullet(pygame.sprite.Sprite):
@@ -14,18 +14,20 @@ class Bullet(pygame.sprite.Sprite):
         self.longitude = longitude
 
     def update(self):
-        
         if self.latitude == "north":
-            self.rect.y -= clock.get_time()/5
+            self.rect.y -= clock.get_time()/3
         elif self.latitude == "south":
-            self.rect.y += clock.get_time()/5
+            self.rect.y += clock.get_time()/3
         if self.longitude == "west":
-            self.rect.x -= clock.get_time()/5
+            self.rect.x -= clock.get_time()/3
         elif self.longitude == "east":
-            self.rect.x += clock.get_time()/5
+            self.rect.x += clock.get_time()/3
 
         self.movement_timer = CLEAR
 
+        for proj in active_projectiles:
+            if proj.rect.x < 0 or proj.rect.x >= WIDTH or proj.rect.y < 0 or proj.rect.y >= HEIGHT:
+                proj.kill()
+
 
 active_projectiles = pygame.sprite.Group()
-# active_projectiles.add(Bullet(30 * 32, 3 * 32, "south", "None"))

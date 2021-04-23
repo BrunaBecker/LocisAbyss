@@ -1,6 +1,4 @@
-import pygame
-
-from settings import clock, screen
+from settings import clock, screen, pygame
 from maps import active_map
 from player import player
 from projectiles import active_projectiles
