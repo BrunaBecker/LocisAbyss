@@ -2,7 +2,6 @@ import pygame
 from settings import CLEAR, WIDTH, HEIGHT, clock, screen
 from random import choice
 from tools import Tools
-from math import sin, pi
 from projectiles import Bullet, active_projectiles
 
 SPRITE_RATE = 100
@@ -52,7 +51,7 @@ class Enemy(pygame.sprite.Sprite):
         self.sprite_timer = CLEAR
 
     def attack(self):
-        active_projectiles.add(Bullet(self.rect.x, self.rect.y, self.player_latitude, self.current_flip))
+        active_projectiles.add(Bullet(self.rect.centerx, self.rect.centery, self.player_latitude, self.current_flip))
         self.attack_timer = CLEAR
 
     def update(self):

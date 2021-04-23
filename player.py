@@ -1,10 +1,10 @@
 import pygame
 import json
-
 from settings import player_assets_folder, CLEAR, WIDTH, HEIGHT, path, clock, fool_font, screen, interact_text_width
 from maps import active_map
-from collision import Collision_Block, get_volatile_collision, get_interaction
+from collision import Collision_Block, get_interaction
 from tools import Tools
+from projectiles import active_projectiles
 
 SPRITE_RATE = 60  # Sets the interval between sprites updates
 MOVEMENT_RATE = 220  # Sets the interval between player movement
@@ -49,7 +49,6 @@ class Player(pygame.sprite.Sprite):
 
         self.max_hp = 10
         self.hp = self.max_hp
-        self.regen = 1
 
         # Start clocks and cooldowns
         self.sprite_timer = SPRITE_RATE
@@ -58,7 +57,6 @@ class Player(pygame.sprite.Sprite):
         self.current_frame = CLEAR
         self.attack_frame = CLEAR
         self.interact_timer = CLEAR
-        self.regen_timer = CLEAR
         self.damaged_timer = CLEAR
         # Sets the starting player horizontal orientation. Needed to flip its sprites when it change directions.
         self.current_flip = "right"
@@ -137,9 +135,8 @@ class Player(pygame.sprite.Sprite):
         self.sprite_timer = CLEAR
 
     def not_colliding(self, direction):
-        v_collision = get_volatile_collision(active_map.current_map)
         return (pygame.sprite.spritecollideany(self.collision_wings[direction], active_map.collision_group) is None
-                and pygame.sprite.spritecollideany(self.collision_wings[direction], v_collision) is None
+                and pygame.sprite.spritecollideany(self.collision_wings[direction], active_map.volatile_collision) is None
                 and pygame.sprite.spritecollideany(self.collision_wings[direction], active_map.enemies) is None)
 
     def attack_enemy(self):
@@ -156,23 +153,25 @@ class Player(pygame.sprite.Sprite):
         for enemy in active_map.enemies:
             enemy.within_range = True if Tools.get_distance(self, enemy) else False
 
-            if enemy.within_range and self.rect.x < enemy.rect.x:
+            if enemy.within_range and self.x < enemy.x:
                 enemy.current_flip = "west"
-            elif enemy.within_range and self.rect.x > enemy.rect.x:
+            elif enemy.within_range and self.x > enemy.x:
                 enemy.current_flip = "east"
-            else:
-                enemy.current_flip = "None"
+            elif enemy.within_range and self.x == enemy.x:
+                enemy.current_flip = ""
 
-            if enemy.within_range and self.rect.y < enemy.rect.y:
+            if enemy.within_range and self.y < enemy.y:
                 enemy.player_latitude = "north"
-            elif enemy.within_range and self.rect.y > enemy.rect.y:
+            elif enemy.within_range and self.y > enemy.y:
                 enemy.player_latitude = "south"
-            else: 
-                enemy.player_latitude = "None"
+            elif enemy.within_range and self.y == enemy.y: 
+                enemy.player_latitude = ""
 
-                
-                
-            
+
+    def player_hit_by_projectile(self):
+        if any(pygame.sprite.groupcollide(player, active_projectiles, False, True)):
+            self.hp -= 1
+
 
     def update(self):
 
@@ -181,7 +180,6 @@ class Player(pygame.sprite.Sprite):
         self.movement_timer += clock.get_time()
         self.attack_timer += clock.get_time()
         self.interact_timer += clock.get_time()
-        self.regen_timer += clock.get_time()
 
         # Only updates sprite if it's off cooldown
         if self.sprite_timer >= SPRITE_RATE:
@@ -190,11 +188,6 @@ class Player(pygame.sprite.Sprite):
 
         if self.hp != self.max_hp:
             Tools.health_bar(screen, self.hp, self.max_hp, self.x, self.y, self.rect.width, self.rect.height)
-            if self.regen_timer >= 1000:
-                self.hp += self.regen
-                self.regen_timer = CLEAR
-                if self.hp > self.max_hp:
-                    self.hp == self.max_hp
 
         # Gets the key pressed by the player this frame
         keystate = pygame.key.get_pressed()
@@ -251,6 +244,7 @@ class Player(pygame.sprite.Sprite):
             self.attack_enemy()
 
         self.update_enemy_distance()
+        self.player_hit_by_projectile()
 
 
 player = pygame.sprite.Group()

@@ -1,9 +1,10 @@
 import pygame
 from pytmx.util_pygame import load_pygame
 import json
-from collision import get_map_collision
+from collision import get_map_collision, get_volatile_collision
 from settings import maps_folder, path, screen
 from enemy_archetypes import monster_types
+from projectiles import active_projectiles
 
 # Load Maps. To be updated with more maps. Pay dear attention to escability!!
 class Tmx_Map():
@@ -23,6 +24,7 @@ class Tmx_Map():
         self.collision_group = pygame.sprite.Group()
         get_map_collision(screen, self.current_map, self.collision_group)
         self.collision_group.update()
+        self.volatile_collision = get_volatile_collision(self.current_map)
 
         self.interactions = {
             "level_one": {
@@ -66,7 +68,8 @@ class Tmx_Map():
         for enemy in self.enemies_load:
             self.enemies.add(monster_types[enemy["type"]](enemy["x"]*self.TILEWIDTH, enemy["y"]*self.TILEHEIGHT, enemy["initial_state"]))
 
-
+    def update(self):
+        self.volatile_collision = get_volatile_collision(active_map.current_map)
 
 active_map = Tmx_Map("level_one")
 
