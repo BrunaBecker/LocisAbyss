@@ -142,6 +142,21 @@ class Player(pygame.sprite.Sprite):
                 and pygame.sprite.spritecollideany(self.collision_wings[direction], v_collision) is None
                 and pygame.sprite.spritecollideany(self.collision_wings[direction], active_map.enemies) is None)
 
+    def attack_enemy(self):
+        if self.current_flip == "right":
+            enemy_hit = pygame.sprite.spritecollideany(self.collision_wings["east"], active_map.enemies)
+            if enemy_hit:
+                enemy_hit.do_damage()
+        elif self.current_flip == "left":
+            enemy_hit = pygame.sprite.spritecollideany(self.collision_wings["west"], active_map.enemies)
+            if enemy_hit:
+                enemy_hit.do_damage()
+
+    def update_enemy_distance(self):
+        for enemy in active_map.enemies:
+            enemy.within_range = True if Tools.get_distance(self, enemy) else False
+                
+            
 
     def update(self):
 
@@ -218,16 +233,8 @@ class Player(pygame.sprite.Sprite):
             self.current_frame = self.attack_frame
             self.attack_timer = CLEAR
             self.attack_enemy()
-    
-    def attack_enemy(self):
-        if self.current_flip == "right":
-            enemy_hit = pygame.sprite.spritecollideany(self.collision_wings["east"], active_map.enemies)
-            if enemy_hit:
-                enemy_hit.do_damage()
-        elif self.current_flip == "left":
-            enemy_hit = pygame.sprite.spritecollideany(self.collision_wings["west"], active_map.enemies)
-            if enemy_hit:
-                enemy_hit.do_damage()
+
+        self.update_enemy_distance()
 
 
 player = pygame.sprite.Group()

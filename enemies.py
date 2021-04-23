@@ -18,8 +18,9 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.Surface(self.sprites[self.current_state][self.current_sprite_frame].get_size())
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.rect.x = start_x
-        self.rect.y = start_y
+        self.x, self.y = start_x, start_y
+        self.rect.x, self.rect.y = self.x, self.y
+        self.within_range = False
 
         self.hp = self.max_hp
 
@@ -29,24 +30,21 @@ class Enemy(pygame.sprite.Sprite):
     def parse_sprite(self):
 
         if self.damaged_timer > 0:
-            frame = self.sprites["damaged"]
+            self.image = self.sprites["damaged"]
             self.current_sprite_frame = 0
         elif self.hp == 0:
             self.kill()
             return 0;
         else:
             self.current_sprite_frame = (self.current_sprite_frame + 1) % len(self.sprites[self.current_state])
-            frame = self.sprites[self.current_state][self.current_sprite_frame]
+            self.image = self.sprites[self.current_state][self.current_sprite_frame]
 
-        w, h = frame.get_size()
-        sprite = pygame.Surface((w, h))
-        sprite.blit(frame, (0,0))
-        sprite.set_colorkey((0, 0, 0))
         if self.current_flip == "right":
-            self.image = pygame.transform.flip(sprite, True, False)
-        else:
-            self.image = sprite
+            self.image = pygame.transform.flip(self.image, True, False)
+
         self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = self.x, self.y
         self.sprite_timer = CLEAR
 
 
@@ -62,12 +60,17 @@ class Enemy(pygame.sprite.Sprite):
         if self.sprite_timer >= SPRITE_RATE:
             self.parse_sprite()
 
-        if self.damaged_timer > 0 and self.blink == 3:
+        if self.damaged_timer > 0 and self.blink == 4:
             self.image.fill((0,0,0))
             self.blink = 0
-        elif self.damaged_timer > 0 and self.blink < 3:
+        elif self.damaged_timer > 0 and self.blink < 4:
             self.parse_sprite()
             self.blink += 1
+        self.image.set_colorkey((0, 0, 0))
+
+        if self.within_range and self.current_state == "hidden":
+            self.current_state = "spawn"
+            
 
     def do_damage(self):
         self.blink = 0

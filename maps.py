@@ -5,10 +5,7 @@ from collision import get_map_collision
 from settings import maps_folder, path, screen
 from enemy_archetypes import monster_types
 
-# Yikes... This file is not optimized at all. Proceed with caution.
-
 # Load Maps. To be updated with more maps. Pay dear attention to escability!!
-# Note from future: We've failed escability. TODO Come back to redo this when you have more maps.
 class Tmx_Map():
     def __init__(self, level):
         self.name = level
@@ -67,10 +64,7 @@ class Tmx_Map():
 
     def load_enemies_group(self):
         for enemy in self.enemies_load:
-            if enemy["type"] == "ghost" and enemy["hidden"]:
-                self.enemies.add(monster_types[enemy["type"]](enemy["x"]*self.TILEWIDTH, enemy["y"]*self.TILEHEIGHT, "spawn"))
-            else:
-                self.enemies.add(monster_types[enemy["type"]](enemy["x"]*self.TILEWIDTH, enemy["y"]*self.TILEHEIGHT))
+            self.enemies.add(monster_types[enemy["type"]](enemy["x"]*self.TILEWIDTH, enemy["y"]*self.TILEHEIGHT, enemy["initial_state"]))
 
 
 

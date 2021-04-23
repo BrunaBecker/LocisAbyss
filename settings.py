@@ -14,6 +14,7 @@ maps_folder = path.join(loci_dir, "maps")
 assets_folder = path.join(loci_dir, "assets")
 player_assets_folder = path.join(assets_folder, "Knight")
 enemies_assets_folder = path.join(assets_folder, "Enemies")
+projectiles_assets_folder = path.join(enemies_assets_folder, "projectile")
 
 
 pygame.display.set_caption("Loci's Abyss")

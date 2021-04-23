@@ -1,7 +1,7 @@
 import pygame
 from settings import path, enemies_assets_folder
+from enemies import Enemy, Tools
 from os import listdir
-from enemies import Enemy
 
 demon_folder = path.join(enemies_assets_folder, "demon_boss")
 ghost_folder = path.join(enemies_assets_folder, "ghost")
@@ -9,10 +9,8 @@ hell_beast_folder = path.join(enemies_assets_folder, "hell_beast")
 hell_hound_folder = path.join(enemies_assets_folder, "hell_hound")
 nightmare_folder = path.join(enemies_assets_folder, "nightmare")
 skull_folder = path.join(enemies_assets_folder, "skull")
-
-
 class Demon(Enemy):
-    def __init__(self, start_x, start_y):
+    def __init__(self, start_x, start_y, initial_state="idle"):
         self.name = "demon"
         self.sprites = {
             "idle": list(pygame.image.load(path.join(demon_folder, "demon_idle", f)) for f in listdir(path.join(demon_folder, "demon_idle"))),
@@ -22,11 +20,11 @@ class Demon(Enemy):
 
 
         self.max_hp = 12
-        Enemy.__init__(self, start_x, start_y)
+        Enemy.__init__(self, start_x, start_y, initial_state)
 
 
 class Ghost(Enemy):
-    def __init__(self, start_x, start_y):
+    def __init__(self, start_x, start_y, initial_state="idle"):
         self.name= "ghost"
         self.sprites = {
             "spawn": list(pygame.image.load(path.join(ghost_folder, "ghost_appears", f)) for f in listdir(path.join(ghost_folder, "ghost_appears"))),
@@ -34,14 +32,22 @@ class Ghost(Enemy):
             "shriek": list(pygame.image.load(path.join(ghost_folder, "ghost_shriek", f)) for f in listdir(path.join(ghost_folder, "ghost_shriek"))),
             "death": list(pygame.image.load(path.join(ghost_folder, "ghost_death", f)) for f in listdir(path.join(ghost_folder, "ghost_death"))),
             "damaged": pygame.image.load(path.join(ghost_folder, "ghost_damaged.png")),
+            "hidden": [pygame.Surface((32,32))]
         }
 
+        def update():
+            Enemy.update()
+            if self.within_range and self.current_state == "hidden":
+                self.current_state = "spawn"
+            
+
+
         self.max_hp = 5
-        Enemy.__init__(self, start_x, start_y)
+        Enemy.__init__(self, start_x, start_y, initial_state)
 
 
 class Hell_Beast(Enemy):
-    def __init__(self, start_x, start_y):
+    def __init__(self, start_x, start_y, initial_state="idle"):
         self.name = "hell_beast"
         self.sprites = {
             "idle": list(pygame.image.load(path.join(hell_beast_folder, "hell_beast_idle", f)) for f in listdir(path.join(hell_beast_folder, "hell_beast_idle"))),
@@ -50,10 +56,10 @@ class Hell_Beast(Enemy):
         }
 
         self.max_hp = 8
-        Enemy.__init__(self, start_x, start_y)
+        Enemy.__init__(self, start_x, start_y, initial_state)
 
 class Hell_Hound(Enemy):
-    def __init__(self, start_x, start_y):
+    def __init__(self, start_x, start_y, initial_state="idle"):
         self.name = "hell_hound"
         self.sprites = {
             "idle": list(pygame.image.load(path.join(hell_hound_folder, "hell_hound_idle", f)) for f in listdir(path.join(hell_hound_folder, "hell_hound_idle"))),
@@ -64,10 +70,10 @@ class Hell_Hound(Enemy):
         }
 
         self.max_hp = 3
-        Enemy.__init__(self, start_x, start_y)
+        Enemy.__init__(self, start_x, start_y, initial_state)
 
 class Skull(Enemy):
-    def __init__(self, start_x, start_y):
+    def __init__(self, start_x, start_y, initial_state="idle"):
         self.name = "skull"
         sprites_before = {
             "idle": list(pygame.image.load(path.join(skull_folder, "fire-skull", f)) for f in listdir(path.join(skull_folder, "fire-skull"))),
@@ -79,7 +85,7 @@ class Skull(Enemy):
         }
 
         self.max_hp = 3
-        Enemy.__init__(self, start_x, start_y)
+        Enemy.__init__(self, start_x, start_y, initial_state)
 
 class Projectile:
     sprites = (pygame.image.load(f) for f in listdir(path.join(enemies_assets_folder, "projectile")))

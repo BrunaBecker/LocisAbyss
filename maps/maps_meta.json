@@ -5,22 +5,25 @@
         "enemies": [
             {
                 "type": "hell hound",
+                "initial_state": "idle",
                 "x": 23,
                 "y": 24
             },
             {
                 "type": "hell hound",
+                "initial_state": "idle",
                 "x": 33,
                 "y": 27
             },
             {
                 "type": "skull",
+                "initial_state": "idle",
                 "x": 32,
                 "y": 14
             },
             {
                 "type": "ghost",
-                "hidden": 0,
+                "initial_state": "hidden",
                 "x": 30,
                 "y": 3
             }
@@ -30,11 +33,13 @@
         "enemies": [
             {
                 "type": "ghost",
+                "initial_state": "idle",
                 "x": 10,
                 "y": 10
             },
             {
                 "type": "skull",
+                "initial_state": "idle",
                 "x": 40,
                 "y": 200
             }
