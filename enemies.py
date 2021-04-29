@@ -1,6 +1,6 @@
 import pygame
 from settings import CLEAR, WIDTH, HEIGHT, clock, screen
-from random import choice
+from random import choice, randint
 from tools import Tools
 from projectiles import Bullet, active_projectiles
 
@@ -10,25 +10,30 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, start_x, start_y, initial_state="idle"):
         pygame.sprite.Sprite.__init__(self)
 
-
+        # Start timers
         self.sprite_timer = CLEAR
         self.movement_timer = CLEAR
         self.damaged_timer = CLEAR
         self.attack_timer = ATTACK_RATE
+
+        # Initial state is defined from data on meta_data on maps
         self.current_state = initial_state
-        #self.sprite_width, self.sprite_height = self.sprites[current_state][0].get_size()
-        self.current_sprite_frame = CLEAR
+        # Starts in a random frame to prevent synchronized enemies that look unnatural
+        self.current_sprite_frame = randint(0, len(self.sprites[self.current_state])-1)
+        # Creates a clean surface with the current dimensions to initialize the rect
         self.image = pygame.Surface(self.sprites[self.current_state][self.current_sprite_frame].get_size())
         self.rect = self.image.get_rect()
-        self.mask = pygame.mask.from_surface(self.image)
         self.x, self.y = start_x, start_y
         self.rect.x, self.rect.y = self.x, self.y
+        # Variable that keeps track if the player is within range of an instance of an enemy
         self.within_range = False
+        # ...And to directions the player is
         self.player_latitude = "south"
+        self.current_flip = choice(["west", "east"])
 
+        # Sets health points
         self.hp = self.max_hp
 
-        self.current_flip = choice(["west", "east"])
 
     def parse_sprite(self):
 
@@ -45,7 +50,6 @@ class Enemy(pygame.sprite.Sprite):
         if self.current_flip == "east":
             self.image = pygame.transform.flip(self.image, True, False)
 
-        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = self.x, self.y
         self.sprite_timer = CLEAR

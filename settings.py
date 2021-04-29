@@ -2,8 +2,10 @@ import pygame
 from pygame.time import Clock
 from os import path
 
+# Initialize all imported pygame modules
+pygame.init()
 clock = Clock()
-pygame.font.init() 
+
 
 WIDTH, HEIGHT = 1280, 1024  # Map Size used to define Window
 CLEAR = 0  # Used to clear clocks
@@ -12,6 +14,8 @@ CLEAR = 0  # Used to clear clocks
 loci_dir = path.dirname(__file__)
 maps_folder = path.join(loci_dir, "maps")
 assets_folder = path.join(loci_dir, "assets")
+start_screen_folder = path.join(assets_folder, "Start_Screen")
+audio_folder = path.join(assets_folder, "Audio")
 player_assets_folder = path.join(assets_folder, "Knight")
 enemies_assets_folder = path.join(assets_folder, "Enemies")
 projectiles_assets_folder = path.join(enemies_assets_folder, "projectile")
