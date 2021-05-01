@@ -18,7 +18,7 @@ start_screen_folder = path.join(assets_folder, "Start_Screen")
 audio_folder = path.join(assets_folder, "Audio")
 player_assets_folder = path.join(assets_folder, "Knight")
 enemies_assets_folder = path.join(assets_folder, "Enemies")
-projectiles_assets_folder = path.join(enemies_assets_folder, "projectile")
+projectiles_assets_folder = path.join(enemies_assets_folder, "projectiles")
 
 
 pygame.display.set_caption("Loci's Abyss")

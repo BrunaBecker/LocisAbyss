@@ -5,6 +5,7 @@ from maps import active_map
 from collision import Collision_Block, get_interaction
 from tools import Tools
 from projectiles import active_projectiles
+from enemy_archetypes import demon_burn_column
 
 SPRITE_RATE = 60  # Sets the interval between sprites updates
 MOVEMENT_RATE = 220  # Sets the interval between player movement
@@ -144,10 +145,23 @@ class Player(pygame.sprite.Sprite):
             enemy_hit = pygame.sprite.spritecollideany(self.collision_wings["east"], active_map.enemies)
             if enemy_hit:
                 enemy_hit.do_damage()
+                return
         elif self.current_flip == "left":
             enemy_hit = pygame.sprite.spritecollideany(self.collision_wings["west"], active_map.enemies)
             if enemy_hit:
                 enemy_hit.do_damage()
+                return
+
+        enemy_hit = pygame.sprite.spritecollideany(self.collision_wings["north"], active_map.enemies)
+        if enemy_hit:
+            enemy_hit.do_damage()
+            return
+        enemy_hit = pygame.sprite.spritecollideany(self.collision_wings["south"], active_map.enemies)
+        if enemy_hit:
+            enemy_hit.do_damage()
+            return
+
+
 
     def update_enemy_distance(self):
         for enemy in active_map.enemies:
@@ -169,6 +183,8 @@ class Player(pygame.sprite.Sprite):
 
 
     def player_hit_by_projectile(self):
+        if (pygame.sprite.spritecollideany(self, demon_burn_column)) != None:
+            self.hp -= 0.1
         if any(pygame.sprite.groupcollide(player, active_projectiles, False, True)):
             self.hp -= 1
 
@@ -187,7 +203,7 @@ class Player(pygame.sprite.Sprite):
             
 
         if self.hp != self.max_hp:
-            Tools.health_bar(screen, self.hp, self.max_hp, self.x, self.y, self.rect.width, self.rect.height)
+            Tools.health_bar(screen, self.hp, self.max_hp, self.rect)
 
         # Gets the key pressed by the player this frame
         keystate = pygame.key.get_pressed()
