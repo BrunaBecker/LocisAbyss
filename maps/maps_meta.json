@@ -30,18 +30,38 @@
         ]
     },
     "level_two": {
+        "player_x": 34,
+        "player_y": 3,
         "enemies": [
             {
                 "type": "ghost",
+                "initial_state": "hidden",
+                "x": 4,
+                "y": 9
+            },
+            {
+                "type": "ghost",
+                "initial_state": "hidden",
+                "x": 9,
+                "y": 20
+            },
+            {
+                "type": "hell beast",
                 "initial_state": "idle",
-                "x": 10,
-                "y": 10
+                "x": 22,
+                "y": 17
             },
             {
                 "type": "skull",
                 "initial_state": "idle",
-                "x": 40,
-                "y": 200
+                "x": 7,
+                "y": 15
+            },
+            {
+                "type": "hell hound",
+                "initial_state": "idle",
+                "x": 36,
+                "y": 8
             }
         ]
     }

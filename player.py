@@ -197,24 +197,13 @@ class Player(pygame.sprite.Sprite):
         self.attack_timer += clock.get_time()
         self.interact_timer += clock.get_time()
 
-        # Only updates sprite if it's off cooldown
-        if self.sprite_timer >= SPRITE_RATE:
-            self.parse_sprite()
+        if active_map.map_loaded is True:
+            self.x, self.y = active_map.start_coord
+            active_map.map_loaded = False
+            self.hp = self.max_hp
             
-
-        if self.hp != self.max_hp:
-            Tools.health_bar(screen, self.hp, self.max_hp, self.rect)
-
         # Gets the key pressed by the player this frame
         keystate = pygame.key.get_pressed()
-
-        interaction = get_interaction(active_map.current_map, self.x, self.y)
-        if interaction:
-            interact_hover_text = fool_font.render("Press F to interact", True, (255,255,255))
-            screen.blit(interact_hover_text, (self.x - interact_text_width/3, self.y - 30))
-            if self.interact_timer >= 400 and keystate[pygame.K_f]:
-                self.interact_timer = CLEAR
-                active_map.interactions[active_map.name][interaction]()
 
         # Only moves if movement is off cooldown
         if self.movement_timer >= MOVEMENT_RATE:
@@ -251,6 +240,28 @@ class Player(pygame.sprite.Sprite):
             elif (keystate[pygame.K_w] or keystate[pygame.K_UP]) and self.y > 0 and self.not_colliding("north"):
                 self.y -= active_map.TILEHEIGHT
                 self.movement_timer = CLEAR
+
+        # Only updates sprite if it's off cooldown
+        if self.sprite_timer >= SPRITE_RATE:
+            self.parse_sprite()
+        
+        if self.hp != self.max_hp:
+            Tools.health_bar(screen, self.hp, self.max_hp, self.rect)
+
+        interaction = get_interaction(active_map.current_map, self.x, self.y)
+        if interaction:
+            if interaction.properties.get('key') == "F":
+                interact_hover_text = fool_font.render("Press F to interact", True, (255,255,255))
+                screen.blit(interact_hover_text, (self.x - interact_text_width/3, self.y - 30))
+                if self.interact_timer >= 400 and keystate[pygame.K_f]:
+                    self.interact_timer = CLEAR
+                    active_map.interactions[active_map.name][interaction.name]()
+            elif interaction.properties.get('key') == "E":
+                interact_hover_text = fool_font.render("Press E to break", True, (255,255,255))
+                screen.blit(interact_hover_text, (self.x - interact_text_width/3, self.y - 30))
+                if self.interact_timer >= 400 and keystate[pygame.K_e]:
+                    self.interact_timer = CLEAR
+                    active_map.interactions[active_map.name][interaction.name]()
 
         # The keys E and Space will start the attack animation if attack is off cooldown
         if (keystate[pygame.K_e] or keystate[pygame.K_SPACE]) and self.attack_timer >= 600:

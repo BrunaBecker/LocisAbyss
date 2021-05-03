@@ -6,7 +6,6 @@ from settings import maps_folder, path, screen
 from enemy_archetypes import monster_types
 from projectiles import active_projectiles
 
-# Load Maps. To be updated with more maps. Pay dear attention to escability!!
 class Tmx_Map():
     def __init__(self, level):
         self.name = level
@@ -25,24 +24,53 @@ class Tmx_Map():
         get_map_collision(screen, self.current_map, self.collision_group)
         self.collision_group.update()
         self.volatile_collision = get_volatile_collision(self.current_map)
+        self.map_loaded = True
 
         self.interactions = {
             "level_one": {
-                "lever": self.lever,
-                "exit": None,
-            }
+                "break": self.break_fence_level_one,
+                "lever": self.lever_level_one,
+                "exit": self.next_level,
+            },
+            "level_two": {
+                "break": self.break_fence_level_two,
+                "lever": self.lever_level_two,
+                "exit": self.next_level,
+            }            
         }
 
         self.enemies = pygame.sprite.Group()
-        # TODO: clean previous group
         self.load_enemies_group()
 
-    def lever(self):
+    def break_fence_level_one(self):
+        self.current_map.get_layer_by_name("fence_corridor").visible = False
+        self.current_map.get_layer_by_name("fence_corridor_object").visible = False
+        for obj in self.current_map.get_layer_by_name("interactions"):
+            if obj.name == "break":
+                obj.properties["destroyed"] = True
+
+    def lever_level_one(self):
         self.current_map.get_layer_by_name("doorlocked_object").visible = not self.current_map.get_layer_by_name("doorlocked_object").visible
         self.current_map.get_layer_by_name("doorlocked").visible = not self.current_map.get_layer_by_name("doorlocked").visible
         self.current_map.get_layer_by_name("doorunlocked").visible = not self.current_map.get_layer_by_name("doorunlocked").visible
         self.current_map.get_layer_by_name("leverlocked").visible = not self.current_map.get_layer_by_name("leverlocked").visible
         self.current_map.get_layer_by_name("leverunlocked").visible = not self.current_map.get_layer_by_name("leverunlocked").visible
+
+    def break_fence_level_two(self):
+        self.current_map.get_layer_by_name("fence_treasureroom").visible = False
+        self.current_map.get_layer_by_name("fence_treasureroom_object").visible = False
+        for obj in self.current_map.get_layer_by_name("interactions"):
+            if obj.name == "break":
+                obj.properties["destroyed"] = True
+
+    def lever_level_two(self):
+        self.current_map.get_layer_by_name("room_torch_toggled_off").visible = not self.current_map.get_layer_by_name("room_torch_toggled_off").visible
+        self.current_map.get_layer_by_name("room_torch_toggled_on").visible = not self.current_map.get_layer_by_name("room_torch_toggled_off").visible
+        self.current_map.get_layer_by_name("darkroom").visible = not self.current_map.get_layer_by_name("darkroom").visible
+        self.current_map.get_layer_by_name("leverlocked").visible = not self.current_map.get_layer_by_name("leverlocked").visible
+        self.current_map.get_layer_by_name("leverunlocked").visible = not self.current_map.get_layer_by_name("leverunlocked").visible
+        self.current_map.get_layer_by_name("fence_darkroom").visible = False
+        self.current_map.get_layer_by_name("fence_darkroom_object").visible = False
 
     # This draws every tile from the current active map on the screen. Called every frame.
     def blit_lower_layers(self):
@@ -68,8 +96,17 @@ class Tmx_Map():
         for enemy in self.enemies_load:
             self.enemies.add(monster_types[enemy["type"]](enemy["x"]*self.TILEWIDTH, enemy["y"]*self.TILEHEIGHT, enemy["initial_state"]))
 
+    def next_level(self):
+        if self.name == "level_one":
+            self.__init__("level_two")
+
     def update(self):
         self.volatile_collision = get_volatile_collision(active_map.current_map)
+
+        if self.name == "level_two" and not any(self.enemies):
+            self.current_map.get_layer_by_name("doorlocked_object").visible = False
+            self.current_map.get_layer_by_name("doorlocked").visible = False
+            self.current_map.get_layer_by_name("doorunlocked").visible = True
 
 active_map = Tmx_Map("level_one")
 

@@ -29,6 +29,6 @@ def get_interaction(level, x_player, y_player):
     # The interactive blocks are defined in the .tmx data
     group = level.get_layer_by_name('interactions')
     for obj in group:
-        if obj.x == x_player and obj.y == y_player:
-            return obj.name
+        if obj.x == x_player and obj.y == y_player and not obj.properties["destroyed"]:
+            return obj
     return None
