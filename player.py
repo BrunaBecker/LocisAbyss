@@ -165,7 +165,7 @@ class Player(pygame.sprite.Sprite):
 
     def update_enemy_distance(self):
         for enemy in active_map.enemies:
-            enemy.within_range = True if Tools.get_distance(self, enemy) else False
+            enemy.within_range, enemy.x_distance, enemy.y_distance = Tools.get_distance(self, enemy)
 
             if enemy.within_range and self.x < enemy.x:
                 enemy.current_flip = "west"
@@ -180,6 +180,8 @@ class Player(pygame.sprite.Sprite):
                 enemy.player_latitude = "south"
             elif enemy.within_range and self.y == enemy.y: 
                 enemy.player_latitude = ""
+        
+        
 
 
     def player_hit_by_projectile(self):
@@ -191,6 +193,8 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
 
+        if self.hp == 0:
+            active_map.next_level(restart=True)
         # Updates clocks and cooldowns
         self.sprite_timer += clock.get_time()
         self.movement_timer += clock.get_time()

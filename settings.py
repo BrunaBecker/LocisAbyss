@@ -8,6 +8,7 @@ clock = Clock()
 
 
 WIDTH, HEIGHT = 1280, 1024  # Map Size used to define Window
+TILE_WIDTH, TILE_HEIGHT = 32, 32
 CLEAR = 0  # Used to clear clocks
 
 # Relative Paths Shortcuts

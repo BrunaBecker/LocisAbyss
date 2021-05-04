@@ -93,11 +93,20 @@ class Tmx_Map():
                         screen.blit(image, (x * self.TILEWIDTH, y * self.TILEHEIGHT))
 
     def load_enemies_group(self):
-        for enemy in self.enemies_load:
-            self.enemies.add(monster_types[enemy["type"]](enemy["x"]*self.TILEWIDTH, enemy["y"]*self.TILEHEIGHT, enemy["initial_state"]))
+        colliders_rect = list()
+        for tile in self.collision_group:
+            colliders_rect.append(pygame.Rect(tile.rect.x, tile.rect.y, tile.rect.width, tile.rect.height))
+        for tile in self.volatile_collision:
+            colliders_rect.append(pygame.Rect(tile.rect.x, tile.rect.y, tile.rect.width, tile.rect.height))
 
-    def next_level(self):
-        if self.name == "level_one":
+        for enemy in self.enemies_load:
+            self.enemies.add(monster_types[enemy["type"]](enemy["x"]*self.TILEWIDTH, enemy["y"]*self.TILEHEIGHT, colliders_rect, initial_state=enemy["initial_state"]))
+
+    def next_level(self, restart=False):
+        if restart:
+            self.__init__(self.name)
+
+        elif self.name == "level_one":
             self.__init__("level_two")
 
     def update(self):

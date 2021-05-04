@@ -26,5 +26,5 @@ class Tools():
     @staticmethod
     def get_distance(obj1, obj2):
         d = math.sqrt((obj2.rect.centerx - obj1.rect.centerx)**2 + (obj2.rect.centery - obj1.rect.centery)**2)
-        return True if d < 140 else False
+        return (True if d < 140 else False, (obj2.rect.x - obj1.rect.x), (obj2.rect.y - obj1.rect.y))
         
