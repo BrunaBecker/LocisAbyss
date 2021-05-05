@@ -27,4 +27,16 @@ class Tools():
     def get_distance(obj1, obj2):
         d = math.sqrt((obj2.rect.centerx - obj1.rect.centerx)**2 + (obj2.rect.centery - obj1.rect.centery)**2)
         return (True if d < 140 else False, (obj2.rect.x - obj1.rect.x), (obj2.rect.y - obj1.rect.y))
+
+class boss_damage_area(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((160, 120))
+        self.image.fill((139, 0, 0))
+        self.image.set_alpha(120)
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.centery = 0 ,0 
+            
         
+area_damage = pygame.sprite.Group()
+area_damage.add(boss_damage_area())

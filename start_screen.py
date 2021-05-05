@@ -2,7 +2,7 @@ import pygame
 from settings import clock, path, audio_folder, start_screen_folder, audio_folder, screen, WIDTH, HEIGHT
 from os import listdir
 
-pygame.mixer.music.load(path.join(audio_folder, "Soliloquy.mp3"))
+pygame.mixer.music.load(path.join(audio_folder, "Soliloquy.ogg"))
 
 class StartScreen():
     def __init__(self):

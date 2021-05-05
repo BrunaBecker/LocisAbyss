@@ -58,6 +58,7 @@ class Enemy(pygame.sprite.Sprite):
             # self.image = self.sprites["damaged"]
             # self.current_sprite_frame = 0
 
+        self.image = self.image.convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = self.x + self.x_offset , self.y + self.y_offset
         self.sprite_timer = CLEAR

@@ -24,6 +24,7 @@ class GameState():
         player.update()
         player.draw(screen)
 
+
         # Updates and draws the enemies that are alive
         active_map.enemies.update()
         active_map.enemies.draw(screen)
@@ -55,6 +56,8 @@ while running:
             game.state = "fading"
             pygame.mixer.music.fadeout(3500)
             game.start_screen.confirm_sound.play()
+        clock.tick(10)
+
     elif game.state == "fading":
         if game.start_screen.opacity_bg > 4000:
             game.state = "ingame"
@@ -62,12 +65,12 @@ while running:
         else: 
             game.start_screen.draw_menu()
             game.start_screen.fade_out()
+        clock.tick(10)
     elif game.state == "ingame":
         game.ingame()
+        clock.tick(30)
+
 
     # Update the full display Surface to the screen. Necessary to draw anything at all.
     pygame.display.flip()
     
-    # Limits the FPS to 30
-    clock.tick(30)
-

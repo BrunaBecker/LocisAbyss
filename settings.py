@@ -29,5 +29,5 @@ pygame.display.set_icon(window_icon)
 # Initialize a window or screen for display
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-fool_font = pygame.font.Font(path.join(assets_folder, "fool.ttf"), 20)
+fool_font = pygame.font.Font(path.join(assets_folder, "Fool.ttf"), 20)
 interact_text_width = fool_font.size("Press F to interact")[0]

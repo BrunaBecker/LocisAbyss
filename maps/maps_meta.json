@@ -64,5 +64,17 @@
                 "y": 8
             }
         ]
+    },
+    "level_three": {
+        "player_x": 18,
+        "player_y": 27,
+        "enemies": [
+            {
+                "type": "demon",
+                "initial_state": "idle",
+                "x": 20,
+                "y": 3
+            }
+        ]
     }
 }

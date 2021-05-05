@@ -5,7 +5,7 @@ from maps import active_map
 from collision import Collision_Block, get_interaction
 from tools import Tools
 from projectiles import active_projectiles
-from enemy_archetypes import demon_burn_column
+from enemy_archetypes import demon_burn_column, boss_breath
 
 SPRITE_RATE = 60  # Sets the interval between sprites updates
 MOVEMENT_RATE = 220  # Sets the interval between player movement
@@ -88,7 +88,7 @@ class Player(pygame.sprite.Sprite):
         x, y, w, h = sprite["x"], sprite["y"], sprite["w"], sprite["h"]
         # Defines the image to be drawn according to the meta data
         self.image = self.get_sprite(x, y, w, h)
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_bounding_rect()
 
         # Draw the flipped sprite if the player is turning left
         if self.current_flip == "left":
@@ -167,33 +167,36 @@ class Player(pygame.sprite.Sprite):
         for enemy in active_map.enemies:
             enemy.within_range, enemy.x_distance, enemy.y_distance = Tools.get_distance(self, enemy)
 
-            if enemy.within_range and self.x < enemy.x:
-                enemy.current_flip = "west"
-            elif enemy.within_range and self.x > enemy.x:
-                enemy.current_flip = "east"
-            elif enemy.within_range and self.x == enemy.x:
-                enemy.current_flip = ""
+            if enemy.current_state != "attack":
+                if enemy.within_range and abs(self.rect.centerx - enemy.rect.centerx) <= 12:
+                    enemy.current_flip = ""
+                elif enemy.within_range and self.rect.centerx < enemy.rect.centerx:
+                    enemy.current_flip = "west"
+                elif enemy.within_range and self.rect.centerx > enemy.rect.centerx:
+                    enemy.current_flip = "east"
 
-            if enemy.within_range and self.y < enemy.y:
-                enemy.player_latitude = "north"
-            elif enemy.within_range and self.y > enemy.y:
-                enemy.player_latitude = "south"
-            elif enemy.within_range and self.y == enemy.y: 
+            if enemy.within_range and abs(self.rect.centery - enemy.rect.centery) <= 12: 
                 enemy.player_latitude = ""
+            elif enemy.within_range and self.rect.centery < enemy.rect.centery:
+                enemy.player_latitude = "north"
+            elif enemy.within_range and self.rect.centery > enemy.rect.centery:
+                enemy.player_latitude = "south"
         
         
 
 
     def player_hit_by_projectile(self):
-        if (pygame.sprite.spritecollideany(self, demon_burn_column)) != None:
+        if active_map.name == "level_two" and (pygame.sprite.spritecollideany(self, demon_burn_column)) != None:
             self.hp -= 0.1
+        elif active_map.name == "level_three" and (pygame.sprite.spritecollideany(self, boss_breath)) != None:
+            self.hp -= 0.2
         if any(pygame.sprite.groupcollide(player, active_projectiles, False, True)):
             self.hp -= 1
 
 
     def update(self):
 
-        if self.hp == 0:
+        if self.hp <= 0:
             active_map.next_level(restart=True)
         # Updates clocks and cooldowns
         self.sprite_timer += clock.get_time()

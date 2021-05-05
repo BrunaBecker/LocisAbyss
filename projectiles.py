@@ -20,7 +20,7 @@ class Bullet(pygame.sprite.Sprite):
         self.sprite_timer = SPRITE_RATE
 
         self.get_rotated_image()
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_bounding_rect()
         self.rect.centerx, self.rect.centery = start_x, start_y
 
 
