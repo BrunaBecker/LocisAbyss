@@ -241,6 +241,8 @@ class Hell_Beast(Enemy):
         self.x_offset = -3
         self.y_offset = 2
         self.attack_timer = CLEAR
+        
+
 class Hell_Hound(Enemy):
     def __init__(self, start_x, start_y, colliders, initial_state="idle"):
         self.name = "hell_hound"

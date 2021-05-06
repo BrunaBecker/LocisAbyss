@@ -130,9 +130,9 @@ class Tmx_Map():
         elif self.name == "level_two":
             active_projectiles.empty()
             self.level_three_counter = 0
-            pygame.mixer.music.fadeout(3000)
+            pygame.mixer.music.fadeout(2000)
             pygame.mixer.music.load(path.join(audio_folder, "DragonCastle.ogg"))
-            pygame.mixer.music.play(-1, 0.0, 1000)
+            pygame.mixer.music.play(-1, 0.0, 500)
             self.__init__("level_three")
 
     def fade_screen(self):
@@ -160,8 +160,8 @@ class Tmx_Map():
                 self.current_map.get_layer_by_name("fence_collider").visible = False
             if not any(self.enemies):
                 self.level_three_counter += clock.get_time()
-                if self.level_three_counter >= 2000:
+                if self.level_three_counter >= 3500:
                     if not self.map_transition:
                         self.map_transition = Fader(screen, game_over=True)
 
-active_map = Tmx_Map("level_one")
+active_map = Tmx_Map("level_two")

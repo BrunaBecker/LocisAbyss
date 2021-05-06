@@ -54,9 +54,6 @@ class Enemy(pygame.sprite.Sprite):
             self.holder = self.image.copy()
             self.holder.fill((200, 0, 0, 100), special_flags=pygame.BLEND_ADD)
             self.image = self.holder
-            # TODO: clean this?
-            # self.image = self.sprites["damaged"]
-            # self.current_sprite_frame = 0
 
         self.image = self.image.convert_alpha()
         self.rect = self.image.get_rect()
