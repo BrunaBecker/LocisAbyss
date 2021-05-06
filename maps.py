@@ -2,7 +2,7 @@ import pygame
 from pytmx.util_pygame import load_pygame
 import json
 from collision import get_map_collision, get_volatile_collision
-from settings import maps_folder, path, screen, clock
+from settings import maps_folder, path, screen, clock, audio_folder
 from enemy_archetypes import monster_types
 from projectiles import active_projectiles
 from tools import Fader
@@ -130,6 +130,9 @@ class Tmx_Map():
         elif self.name == "level_two":
             active_projectiles.empty()
             self.level_three_counter = 0
+            pygame.mixer.music.fadeout(3000)
+            pygame.mixer.music.load(path.join(audio_folder, "DragonCastle.ogg"))
+            pygame.mixer.music.play(-1, 0.0, 1000)
             self.__init__("level_three")
 
     def fade_screen(self):
