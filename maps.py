@@ -7,7 +7,6 @@ from enemy_archetypes import monster_types
 from projectiles import active_projectiles
 from tools import Fader
 
-
 class Tmx_Map():
     def __init__(self, level):
         self.name = level

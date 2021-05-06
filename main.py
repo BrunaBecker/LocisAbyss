@@ -1,5 +1,5 @@
 import pygame
-from settings import clock, screen, pygame
+from settings import clock, screen, pygame, audio_folder, path
 from maps import active_map
 from player import player
 from projectiles import active_projectiles
@@ -61,6 +61,8 @@ while running:
     elif game.state == "fading":
         if game.start_screen.opacity_bg > 4000:
             game.state = "ingame"
+            pygame.mixer.music.load(path.join(audio_folder, "HeroicDemise.ogg"))
+            pygame.mixer.music.play(-1, 0.0, 2000)
             del game.start_screen
         else: 
             game.start_screen.draw_menu()
@@ -70,7 +72,7 @@ while running:
         game.ingame()
         if active_map.map_transition:
             active_map.map_transition.draw()
-            
+
         clock.tick(30)
 
 
