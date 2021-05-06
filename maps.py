@@ -164,4 +164,4 @@ class Tmx_Map():
                     if not self.map_transition:
                         self.map_transition = Fader(screen, game_over=True)
 
-active_map = Tmx_Map("level_two")
+active_map = Tmx_Map("level_one")
