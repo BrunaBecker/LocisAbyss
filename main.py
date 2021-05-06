@@ -68,6 +68,9 @@ while running:
         clock.tick(10)
     elif game.state == "ingame":
         game.ingame()
+        if active_map.map_transition:
+            active_map.map_transition.draw()
+            
         clock.tick(30)
 
 

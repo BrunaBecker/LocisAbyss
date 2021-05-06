@@ -1,8 +1,9 @@
 import pygame
 import math
+from settings import WIDTH, HEIGHT, clock, maps_folder, path
 class Tools():
+
     @staticmethod
-    # def health_bar(screen, current_hp, max_hp, cx, cy, sprite_width, sprite_height):
     def health_bar(screen, current_hp, max_hp, rect):
         quotient = current_hp/max_hp
         # if quotient == 1:
@@ -37,6 +38,70 @@ class boss_damage_area(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.centery = 0 ,0 
             
-        
+class Player_Collision():
+    def __init__(self):
+        self.rect = (0,0,0,0)
+
+    def update(self, x, y, w, h):
+        self.rect = (x, y, w, h)
+
+class Fader():
+    def __init__(self, screen, just_fadeout=False, game_over=False):
+        self.screen = screen
+        if just_fadeout:
+            self.fadein = False
+            self.fadeout = True
+            self.min_opacity = 0
+            self.max_opacity = 1600
+            self.opacity = self.max_opacity
+        else:
+            self.fadein = True
+            self.fadeout = False
+            self.min_opacity = 0
+            self.max_opacity = 1600
+            self.opacity = self.min_opacity
+
+        self.image = pygame.Surface((WIDTH, HEIGHT))
+        self.image.fill((0,0,0))
+        if just_fadeout:
+            self.image.set_alpha(255)
+        else:
+            self.image.set_alpha(0)
+            
+
+        self.ready_for_level_transition = False
+        self.done = False
+        self.game_over = game_over
+        if game_over:
+            self.max_opacity = 3000
+            self.end_title = pygame.image.load(path.join(maps_folder, "end_title.png"))
+            self.end_title.set_alpha(0)
+
+    def update(self):
+        if self.fadein:
+            self.opacity += clock.get_time()
+            if self.opacity >= self.max_opacity:
+                self.opacity = self.max_opacity
+                self.fadein = False
+                self.ready_for_level_transition = True
+            self.image.set_alpha((self.opacity/self.max_opacity)*255)
+        elif self.fadeout:
+            self.opacity -= clock.get_time()
+            if self.opacity <= self.min_opacity:
+                self.opacity = self.min_opacity
+                self.done = True
+            self.image.set_alpha((self.opacity/self.max_opacity)*255)
+
+        if self.game_over:
+            self.end_title.set_alpha((self.opacity/self.max_opacity)*255)
+
+    def draw(self):
+        self.screen.blit(self.image, (0,0))
+        if self.game_over:
+            self.screen.blit(self.end_title, (0,0))
+
+
 area_damage = pygame.sprite.Group()
 area_damage.add(boss_damage_area())
+
+player_collision = Player_Collision()

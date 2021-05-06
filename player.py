@@ -3,7 +3,7 @@ import json
 from settings import player_assets_folder, CLEAR, WIDTH, HEIGHT, path, clock, fool_font, screen, interact_text_width
 from maps import active_map
 from collision import Collision_Block, get_interaction
-from tools import Tools
+from tools import Tools, player_collision
 from projectiles import active_projectiles
 from enemy_archetypes import demon_burn_column, boss_breath
 
@@ -197,6 +197,8 @@ class Player(pygame.sprite.Sprite):
     def update(self):
 
         if self.hp <= 0:
+            if active_map.name == "level_three":
+                boss_breath.empty()
             active_map.next_level(restart=True)
         # Updates clocks and cooldowns
         self.sprite_timer += clock.get_time()
@@ -277,6 +279,7 @@ class Player(pygame.sprite.Sprite):
             self.attack_timer = CLEAR
             self.attack_enemy()
 
+        player_collision.update(self.x, self.y, self.rect.width, self.rect.height)
         self.update_enemy_distance()
         self.player_hit_by_projectile()
 

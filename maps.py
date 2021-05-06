@@ -2,9 +2,11 @@ import pygame
 from pytmx.util_pygame import load_pygame
 import json
 from collision import get_map_collision, get_volatile_collision
-from settings import maps_folder, path, screen
+from settings import maps_folder, path, screen, clock
 from enemy_archetypes import monster_types
 from projectiles import active_projectiles
+from tools import Fader
+
 
 class Tmx_Map():
     def __init__(self, level):
@@ -25,17 +27,20 @@ class Tmx_Map():
         self.collision_group.update()
         self.volatile_collision = get_volatile_collision(self.current_map)
         self.map_loaded = True
+        self.map_transition = Fader(screen, just_fadeout=True)
+        self.game_over = False
+        self.level_three_counter = 0
 
         self.interactions = {
             "level_one": {
                 "break": self.break_fence_level_one,
                 "lever": self.lever_level_one,
-                "exit": self.next_level,
+                "exit": self.fade_screen,
             },
             "level_two": {
                 "break": self.break_fence_level_two,
                 "lever": self.lever_level_two,
-                "exit": self.next_level,
+                "exit": self.fade_screen,
             }  ,
             "level_three": {
                 "lever_r": self.lever_r,
@@ -125,10 +130,23 @@ class Tmx_Map():
             self.__init__("level_two")
         elif self.name == "level_two":
             active_projectiles.empty()
+            self.level_three_counter = 0
             self.__init__("level_three")
+
+    def fade_screen(self):
+        self.map_transition = Fader(screen)
+
 
     def update(self):
         self.volatile_collision = get_volatile_collision(active_map.current_map)
+
+        if self.map_transition:
+            self.map_transition.update()
+            if self.map_transition.ready_for_level_transition:
+                self.map_transition.ready_for_level_transition = False
+                self.next_level()
+            if self.map_transition.done:
+                self.map_transition = None
 
         if self.name == "level_two" and not any(self.enemies):
             self.current_map.get_layer_by_name("doorlocked_object").visible = False
@@ -138,6 +156,16 @@ class Tmx_Map():
             if self.current_map.get_layer_by_name("leverrightunlocked").visible and self.current_map.get_layer_by_name("leverleftunlocked").visible:
                 self.current_map.get_layer_by_name("barrier").visible = False
                 self.current_map.get_layer_by_name("fence_collider").visible = False
+            if not any(self.enemies):
+                self.level_three_counter += clock.get_time()
+                if self.level_three_counter >= 2000:
+                    if not self.map_transition:
+                        self.map_transition = Fader(screen, game_over=True)
+
+
+
+
+
 
 active_map = Tmx_Map("level_one")
 

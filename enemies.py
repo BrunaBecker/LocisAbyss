@@ -1,7 +1,7 @@
 import pygame
 from settings import CLEAR, WIDTH, HEIGHT, clock, screen, TILE_WIDTH, TILE_HEIGHT
 from random import choice, randint
-from tools import Tools
+from tools import Tools, player_collision
 # from projectiles import Bullet, active_projectiles
 
 SPRITE_RATE = 120
@@ -90,26 +90,26 @@ class Enemy(pygame.sprite.Sprite):
         for tile in self.colliders:
             if block.colliderect(tile):
                 return
-        if abs(self.y_distance) > self.rect.height or self.x_distance > self.rect.width:
+        if not block.colliderect(player_collision.rect):
             self.x += TILE_WIDTH
     def move_west(self):
         block = pygame.Rect(self.x-TILE_WIDTH, self.y, self.rect.width, self.rect.height)
         for tile in self.colliders:
             if block.colliderect(tile):
                 return
-        if abs(self.y_distance) > self.rect.height or self.x_distance < self.rect.width:
+        if not block.colliderect(player_collision.rect):
             self.x -= TILE_WIDTH
     def move_north(self):
         block = pygame.Rect(self.x, self.y-TILE_HEIGHT, self.rect.width, self.rect.height)
         for tile in self.colliders:
             if block.colliderect(tile):
                 return
-        if abs(self.x_distance) > self.rect.width or self.y_distance < self.rect.height:
+        if not block.colliderect(player_collision.rect):
             self.y -= TILE_HEIGHT
     def move_south(self):
         block = pygame.Rect(self.x, self.y+TILE_HEIGHT, self.rect.width, self.rect.height)
         for tile in self.colliders:
             if block.colliderect(tile):
                 return
-        if abs(self.x_distance) > self.rect.width or self.y_distance > self.rect.height:
+        if not block.colliderect(player_collision.rect):
             self.y += TILE_HEIGHT
