@@ -23,7 +23,7 @@ This game is compatible with both Windows and Linux.
 
 # How to Play 
 
-Download the source code from the [GitHub](https://github.com/BrunaBecker/LocisAbyss) or [Itch.io](https://brunaeelisa.itch.io/locis-abyss) page and execute the loci.cmd file, or run main.py.
+Download the source code from the [GitHub](https://github.com/BrunaBecker/LocisAbyss) or [Itch.io](https://brunaeelisa.itch.io/locis-abyss) page and execute the loci.cmd file (which is the same as launching main.py itself).
 
 # Resources and Credits:
 	
