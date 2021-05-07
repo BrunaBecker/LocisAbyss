@@ -43,7 +43,7 @@ class Demon(Enemy):
                     self.x -= self.x_distance/abs(self.x_distance) * TILE_WIDTH
                     self.ready_to_move = False
                 elif self.y_distance != 0 and (abs(self.y_distance) < abs(self.x_distance) or self.x_distance == 0):
-                    self.y += self.y_distance/abs(self.y_distance) * TILE_HEIGHT
+                    self.y -= self.y_distance/abs(self.y_distance) * TILE_HEIGHT
                     self.ready_to_move = False
 
         if self.current_state == "attack":
@@ -227,7 +227,7 @@ class Hell_Beast(Enemy):
                     self.ready_to_move = False
 
         if self.current_sprite_frame == 2 and self.current_state == "burn":
-            demon_burn_column.add(Collision_Block(self.x, self.y, self.rect.width, self.rect.height))
+            demon_burn_column.add(Collision_Block(self.rect.x-5, self.rect.y, self.rect.width+10, self.rect.height+40))
         elif self.current_sprite_frame == len(self.sprites["burn"])-1 and self.current_state == "burn":
             demon_burn_column.empty()
             self.current_state = "after_burn"

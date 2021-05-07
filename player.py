@@ -199,6 +199,8 @@ class Player(pygame.sprite.Sprite):
         if self.hp <= 0:
             if active_map.name == "level_three":
                 boss_breath.empty()
+            if active_map.name == "level_two":
+                demon_burn_column.empty()
             active_map.next_level(restart=True)
         # Updates clocks and cooldowns
         self.sprite_timer += clock.get_time()
